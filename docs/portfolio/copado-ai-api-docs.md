@@ -20,9 +20,9 @@ I used AI to audit the generated spec and map its resources. I then checked the 
 
 - Role: Technical writer, sole owner (self-initiated)
 - Company: Copado
-- Timeline: [months] 2025
-- Scope: 24 endpoints across [N] resources
-- Stack: OpenAPI (JSON), ClickHelp, Postman, curl, [AI tool]
+- Timeline: August - September 2025
+- Scope: 24 endpoints
+- Stack: OpenAPI (JSON), ClickHelp, Postman, curl, Claude Code
 
 
 ```ascii
