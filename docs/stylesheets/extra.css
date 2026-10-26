@@ -1,0 +1,563 @@
+/* ----------------------------------------------------------------------
+   Warm paper theme — palette, typography and the homepage post grid.
+   Theme override only: lives in extra_css, nothing in Zensical core is
+   touched, so theme updates won't clobber it.
+   ---------------------------------------------------------------------- */
+
+:root {
+  --paper: #EDE7D9;
+  --card: #F6F2E7;
+  --ink: #26261F;
+  --rule: #26261F;
+  --accent: #a36531;
+  --accent2: #3E5C4A;
+  /* Slightly darker than the #6b6a5e spec value: at #6b6a5e the
+     muted-on-paper contrast measures ~4.4:1, just under WCAG AA's 4.5:1
+     for normal-size text. This shade clears ~4.8:1 while staying in the
+     same warm-grey family. */
+  --muted: #625F52;
+}
+
+/* Remap Zensical/Material's own design tokens onto the palette above, so
+   the rest of the theme (admonitions, tables, code blocks, footer, etc.)
+   picks up the warm paper look automatically. Only the "default" (light)
+   scheme is reskinned; the "slate" dark scheme keeps its stock colors. */
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: var(--paper);
+  --md-default-fg-color: var(--ink);
+  --md-default-fg-color--light: var(--muted);
+  --md-default-fg-color--lighter: color-mix(in srgb, var(--ink) 25%, transparent);
+  --md-default-fg-color--lightest: color-mix(in srgb, var(--ink) 8%, transparent);
+  /* The "modern" header/tabs bar uses --md-default-bg-color--light (not
+     --md-primary-fg-color) as its background, so it needs its own
+     override to actually match the page instead of the stock
+     semi-transparent white showing through the blur. */
+  --md-default-bg-color--light: var(--paper);
+  --md-default-bg-color--lighter: var(--paper);
+  --md-default-bg-color--lightest: var(--paper);
+
+  --md-primary-fg-color: var(--ink);
+  --md-primary-bg-color: var(--paper);
+
+  --md-accent-fg-color: var(--accent);
+  --md-accent-fg-color--transparent: color-mix(in srgb, var(--accent) 12%, transparent);
+
+  --md-typeset-a-color: var(--accent);
+  --md-typeset-color: var(--ink);
+  --md-typeset-table-color: color-mix(in srgb, var(--rule) 18%, transparent);
+
+  --md-code-fg-color: var(--ink);
+  --md-code-bg-color: var(--card);
+
+  --md-footer-bg-color: var(--ink);
+  --md-footer-bg-color--dark: var(--ink);
+}
+
+/* ----------------------------------------------------------------------
+   Typography
+   ---------------------------------------------------------------------- */
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3,
+.md-typeset h4,
+.md-typeset h5,
+.md-typeset h6,
+.post-card__title {
+  font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+  font-weight: 700;
+}
+
+/* IBM Plex Sans (body) and IBM Plex Mono (code) are loaded via
+   project.theme.font in zensical.toml, which sets --md-text-font and
+   --md-code-font and fetches the family from Google Fonts. */
+
+.post-card__meta,
+.post-card__kicker {
+  font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;
+}
+
+/* ----------------------------------------------------------------------
+   Homepage: recent posts card grid
+   ---------------------------------------------------------------------- */
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.2rem 0 2rem;
+  max-width: 42rem;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .post-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background-color: var(--card);
+  border: 0.05rem solid color-mix(in srgb, var(--rule) 15%, transparent);
+  color: var(--ink);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+/* .post-card's own "display: flex" above outranks the browser's default
+   [hidden]{display:none} (author CSS always wins over the UA stylesheet),
+   so the tag filter's card.hidden = true had no visual effect without
+   this. */
+.post-card[hidden] {
+  display: none;
+}
+
+/* Material's own ".md-typeset a" rule (class + element) outranks a
+   single-class ".post-card" selector, so text-decoration needs the
+   extra specificity here to actually win. */
+.md-typeset a.post-card,
+.md-typeset a.post-card:hover,
+.md-typeset a.post-card:focus {
+  text-decoration: none;
+}
+
+.post-card:hover,
+.post-card:focus-visible {
+  box-shadow: 0 0.35rem 1rem color-mix(in srgb, var(--ink) 18%, transparent);
+  transform: translateY(-0.15rem);
+}
+
+.post-card__cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--paper);
+}
+
+.post-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+}
+
+.post-card__body {
+  padding: 0.75rem 0.85rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.post-card__title {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.3;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.post-card__excerpt {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.post-card__meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.post-card__tags {
+  margin: 0.3rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.post-card__tag {
+  font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background-color: color-mix(in srgb, var(--accent2) 12%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.12rem 0.4rem;
+}
+
+/* "Top posts" heading injected by recent-posts.html, after the grid it
+   labels — see overrides/main.html. */
+#top-posts {
+  margin-top: 1.6rem;
+}
+
+/* ----------------------------------------------------------------------
+   Posts archive: tag filter (overrides/partials/all-posts.html)
+   ---------------------------------------------------------------------- */
+
+.tag-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 1rem 0 1.4rem;
+}
+
+.tag-filter__tag {
+  font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  cursor: pointer;
+  border: 0.05rem solid color-mix(in srgb, var(--rule) 35%, transparent);
+  border-radius: 1rem;
+  padding: 0.25rem 0.7rem;
+}
+
+.tag-filter__tag--active {
+  color: var(--paper);
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* --- Generic Image Modifiers --- */
+img.rounded {
+  border-radius: 8px;
+}
+
+/* ----------------------------------------------------------------------
+   Video embeds
+   ---------------------------------------------------------------------- */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.2rem 0;
+}
+
+.video-grid iframe {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .video-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Buttons
+   ---------------------------------------------------------------------- */
+
+.md-typeset a.hero__cta,
+.md-typeset a.hero__cta:hover,
+.md-typeset a.hero__cta:focus,
+.md-typeset a.site-button,
+.md-typeset a.site-button:hover,
+.md-typeset a.site-button:focus {
+  color: var(--paper);
+  text-decoration: none;
+}
+
+.site-button {
+  display: inline-block;
+  /*font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;*/
+  font-size: 0.6rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background-color: var(--accent);
+  border-radius: 2rem;
+  padding: 0.55rem 1.1rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hero__cta {
+  display: inline-block;
+  /*font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;*/
+  font-size: 0.8rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background-color: var(--accent);
+  border-radius: 2rem;
+  padding: 0.65rem 1.4rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero__cta:hover,
+.hero__cta:focus-visible,
+.site-button:hover,
+.site-button:focus-visible {
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.35rem 1rem color-mix(in srgb, var(--ink) 18%, transparent);
+}
+
+/* ----------------------------------------------------------------------
+   Homepage: hero
+   ---------------------------------------------------------------------- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2.5rem;
+  margin: 1.5rem 0 3rem;
+}
+
+.hero__intro {
+  flex: 1 1 26rem;
+  max-width: 30rem;
+}
+
+.hero__greeting {
+  margin-bottom: 0.3rem;
+}
+
+.hero__role {
+  /*font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;*/
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin: 0 0 0.9rem;
+}
+
+.hero__tagline {
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 1.4rem;
+}
+
+/* The oval "stadium" frame with a light ring, like the reference photo:
+   a padded outer shape in --paper sits behind the image, and the image
+   itself is clipped to the same oval so it reads as one continuous
+   shape rather than a photo-inside-a-border. */
+.hero__photo-frame,
+.md-typeset .hero__photo-frame {
+  width: 15rem;
+  max-width: 15rem;
+  aspect-ratio: 3 / 4;
+  flex: 0 0 15rem;
+  padding: 0.5rem;
+  border-radius: 130px / 120px;
+  background-color: var(--paper);
+  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--ink) 15%, transparent);
+}
+
+.hero__photo,
+.md-typeset .hero__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center 25%;
+  border-radius: 130px / 120px;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .hero {
+    flex-direction: column-reverse;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .hero__intro {
+    max-width: none;
+  }
+
+  .hero__photo-frame {
+    width: 12rem;
+  }
+}
+
+/* ----------------------------------------------------------------------
+   Landing page: testimonials
+   ---------------------------------------------------------------------- */
+
+.testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  gap: 1.5rem;
+  margin: 1.2rem 0 2rem;
+}
+
+.testimonial-card {
+  position: relative;
+  margin: 0;
+  padding: 1.6rem 1.6rem 1.4rem;
+  border-radius: 0.9rem;
+  background-color: var(--card);
+  border: 0.05rem solid color-mix(in srgb, var(--rule) 15%, transparent);
+}
+
+.testimonial-card__mark {
+  display: block;
+  /*font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;*/
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+
+.testimonial-card__quote {
+  margin: 0 0 1.4rem;
+  color: var(--ink);
+  font-size: 0.70rem;
+  line-height: 1.6;
+}
+
+.testimonial-card__attribution {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.testimonial-card__avatar {
+  flex: 0 0 auto;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.1rem solid var(--accent);
+}
+
+.testimonial-card__names {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.testimonial-card__name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.testimonial-card__role {
+  font-size: 0.78rem;
+  color: var(--accent);
+}
+
+/* ----------------------------------------------------------------------
+   Portfolio archive
+   ---------------------------------------------------------------------- */
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.2rem 0 2rem;
+}
+
+@media screen and (max-width: 44.9375em) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.portfolio-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background-color: var(--card);
+  border: 0.05rem solid color-mix(in srgb, var(--rule) 15%, transparent);
+  color: var(--ink);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.portfolio-card[hidden] {
+  display: none;
+}
+
+.md-typeset a.portfolio-card,
+.md-typeset a.portfolio-card:hover,
+.md-typeset a.portfolio-card:focus {
+  text-decoration: none;
+}
+
+.portfolio-card:hover,
+.portfolio-card:focus-visible {
+  box-shadow: 0 0.35rem 1rem color-mix(in srgb, var(--ink) 18%, transparent);
+  transform: translateY(-0.15rem);
+}
+
+.portfolio-card__cover {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--paper);
+}
+
+.portfolio-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+}
+
+.portfolio-card__body {
+  padding: 0.85rem 0.95rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.portfolio-card__title {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.portfolio-card__excerpt {
+  margin: 0;
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+.portfolio-card__meta {
+  margin: 0.1rem 0 0;
+  font-size: 0.60rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;
+}
+
+.portfolio-card__tags {
+  margin: 0.3rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.portfolio-card__tag {
+  font-family: var(--md-code-font, "IBM Plex Mono"), "Courier New", monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  background-color: color-mix(in srgb, var(--accent2) 12%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.12rem 0.4rem;
+}

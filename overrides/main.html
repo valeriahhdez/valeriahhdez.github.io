@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  {{ super() }}
+  {% if page.url == "" %}
+    {% include "partials/hero.html" %}
+    {% include "partials/why-work-with-me.html" %}
+    {% include "partials/testimonials.html" %}
+
+  {% elif page.url == "portfolio/" %}
+    {% include "partials/all-portfolio.html" %}
+    
+  {% elif page.url == "posts/" %}
+    {% include "partials/recent-posts.html" %}
+    {% include "partials/all-posts.html" %}
+  {% endif %}
+{% endblock %}

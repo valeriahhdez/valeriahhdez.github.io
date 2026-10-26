@@ -1,0 +1,44 @@
+{#-
+  Shared helpers for the portfolio archive: walks the nav tree for pages
+  with `portfolio: true` in frontmatter and renders them as cards.
+  Import with:
+    {% import "partials/portfolio-lib.html" as plib %}
+-#}
+{% macro collect(items, ns) %}
+  {% for item in items %}
+    {% if item.meta and item.meta.portfolio %}
+      {% set ns.projects = ns.projects + [item] %}
+    {% endif %}
+    {% if item.children %}
+      {{ collect(item.children, ns) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro card(project) %}
+  <a class="portfolio-card" href="{{ project.url | url }}"{% if project.meta.tags %} data-tags="{{ project.meta.tags | join(',') }}"{% endif %}>
+    {% if project.meta.cover %}
+      <div class="portfolio-card__cover">
+        <img src="{{ project.meta.cover | url }}" alt="" loading="lazy">
+      </div>
+    {% endif %}
+    <div class="portfolio-card__body">
+      <h3 class="portfolio-card__title">{{ project.title }}</h3>
+      {% if project.meta.description %}
+        <p class="portfolio-card__excerpt">{{ project.meta.description }}</p>
+      {% endif %}
+      {% if project.meta.role or project.meta.year %}
+        <p class="portfolio-card__meta">
+          {%- if project.meta.role %}{{ project.meta.role }}{% endif -%}
+          {%- if project.meta.role and project.meta.year %} &middot; {% endif -%}
+          {%- if project.meta.year %}{{ project.meta.year }}{% endif -%}
+        </p>
+      {% endif %}
+      {% if project.meta.tags %}
+        <p class="portfolio-card__tags">
+          {% for tag in project.meta.tags %}<span class="portfolio-card__tag">{{ tag }}</span>{% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  </a>
+{% endmacro %}

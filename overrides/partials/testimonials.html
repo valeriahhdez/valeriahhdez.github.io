@@ -1,0 +1,12 @@
+{#-
+  Testimonials section: renders every entry from testimonial-lib.html.
+  Rendered on the homepage only (see main.html).
+-#}
+{% import "partials/testimonial-lib.html" as tlib %}
+
+<section class="testimonials">
+  <h2>Testimonials</h2>
+  <div class="testimonials__grid">
+    {% for t in tlib.all %}{{ tlib.card(t) }}{% endfor %}
+  </div>
+</section>

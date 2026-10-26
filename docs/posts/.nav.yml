@@ -1,0 +1,5 @@
+nav:
+  - "*"
+sort:
+  by: filename
+  direction: desc

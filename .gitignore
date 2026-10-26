@@ -1,0 +1,16 @@
+# Virtual environment
+.venv/
+
+# Zensical build output
+site/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Local project caches
+.cache
+*.cache/
+
+# Credentials
+.env

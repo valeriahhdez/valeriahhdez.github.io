@@ -1,0 +1,47 @@
+{#-
+  Shared helpers for anywhere we render post cards (homepage recent/top
+  sections, the posts archive). Import with:
+    {% import "partials/post-lib.html" as lib %}
+
+  collect(items, ns) walks the nav tree (any depth, e.g. year subfolders
+  under docs/posts/) and appends every page with `post: true` in its
+  frontmatter onto ns.posts. Call it as:
+    {% set ns = namespace(posts=[]) %}
+    {{ lib.collect(nav.items, ns) }}
+-#}
+{% macro collect(items, ns) %}
+  {% for item in items %}
+    {% if item.meta and item.meta.post %}
+      {% set ns.posts = ns.posts + [item] %}
+    {% endif %}
+    {% if item.children %}
+      {{ collect(item.children, ns) }}
+    {% endif %}
+  {% endfor %}
+{% endmacro %}
+
+{% macro card(post) %}
+  <a class="post-card" href="{{ post.url | url }}"{% if post.meta.tags %} data-tags="{{ post.meta.tags | join(',') }}"{% endif %}>
+    {% if post.meta.cover %}
+      <div class="post-card__cover">
+        <img src="{{ post.meta.cover | url }}" alt="" loading="lazy">
+      </div>
+    {% endif %}
+    <div class="post-card__body">
+      <h3 class="post-card__title">{{ post.title }}</h3>
+      {% if post.meta.description %}
+        <p class="post-card__excerpt">{{ post.meta.description }}</p>
+      {% endif %}
+      <p class="post-card__meta">
+        {%- if post.meta.date %}{{ post.meta.date }}{% endif -%}
+        {%- if post.meta.date and post.meta.author %} &middot; {% endif -%}
+        {%- if post.meta.author %}{{ post.meta.author | upper }}{% endif -%}
+      </p>
+      {% if post.meta.tags %}
+        <p class="post-card__tags">
+          {% for tag in post.meta.tags %}<span class="post-card__tag">{{ tag }}</span>{% endfor %}
+        </p>
+      {% endif %}
+    </div>
+  </a>
+{% endmacro %}

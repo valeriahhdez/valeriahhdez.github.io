@@ -1,0 +1,28 @@
+{#-
+  Card grids of recent and featured posts, rendered on the homepage only
+  (see main.html). Shares its post-collection and card markup with the
+  posts archive page via partials/post-lib.html.
+-#}
+{% import "partials/post-lib.html" as lib %}
+{% set ns = namespace(posts=[]) %}
+{{ lib.collect(nav.items, ns) }}
+
+{% set all_posts = ns.posts | sort(attribute="meta.date", reverse=true) %}
+{% set recent = all_posts[:4] %}
+{% set top = all_posts | selectattr("meta.featured") | list %}
+
+{% if recent %}
+  <h2 id="recent-posts">Recent posts</h2>
+  <div class="post-grid">
+    {% for post in recent %}{{ lib.card(post) }}{% endfor %}
+  </div>
+{% endif %}
+
+{#
+{% if top %}
+  <h2 id="top-posts">Top posts</h2>
+  <div class="post-grid">
+    {% for post in top %}{{ lib.card(post) }}{% endfor %}
+  </div>
+{% endif %}
+#}

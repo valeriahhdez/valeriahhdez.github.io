@@ -1,0 +1,18 @@
+{#-
+  Landing page hero: name, tagline, and a link to the portfolio page.
+  Rendered on the homepage only (see main.html).
+-#}
+<div class="hero">
+  <div class="hero__intro">
+    <h1 class="hero__greeting">¡Hola! I'm Valeria Hernandez</h1>
+    <p class="hero__role">Software technical writer</p>
+    <p class="hero__tagline">
+      I write documentation that gives developers the clarity they need to
+      build confidently and solve problems effectively.
+    </p>
+    <a class="hero__cta" href="{{ 'portfolio/' | url }}">View my portfolio</a>
+  </div>
+  <div class="hero__photo-frame">
+    <img class="hero__photo" src="{{ 'assets/images/photos/valeria-2025.jpeg' | url }}" alt="Valeria Hernandez">
+  </div>
+</div>

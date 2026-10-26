@@ -1,0 +1,40 @@
+{#-
+  Shared testimonial data and card macro for the homepage testimonials
+  section. Import with:
+    {% import "partials/testimonial-lib.html" as tlib %}
+
+  Add a new testimonial by appending to the `all` list below — no other
+  file needs to change.
+-#}
+{% set all = [
+  {
+    "name": "Thomas Clark",
+    "title": "Founder and CEO",
+    "company": "Octue",
+    "photo": "assets/images/testimonials/thomas-clark.jpg",
+    "quote": "Valeria has been a great asset to the Octue team - a structured thinker and independent worker, she writes fluently and always with the reader in mind. She's built documentation from scratch for our Strands app, a web application dealing with the technically difficult topic of JSONSchema, always relating the details back to core use cases and helping us to actually position the product effectively. Thanks Valeria!"
+  },
+  {
+    "name": "Isabel Cifrian",
+    "title": "Former Technical Content Manager",
+    "company": "Copado",
+    "photo": "assets/images/testimonials/isabel-cifrian.jpg",
+    "quote": "I had the pleasure of managing Valeria, and I can confidently say she is an outstanding Technical Writer. She is highly capable, professional, and genuinely passionate about her work. Valeria consistently brings thoughtful ideas to the table, is always eager to learn, and proactively looks for ways to improve processes and documentation. She is methodical, well-organized, and excels at adapting to complex environments where multiple projects with tight deadlines need to be managed simultaneously. Her motivation, positive attitude, and commitment to delivering high-quality work make her a fantastic colleague. It was truly a pleasure working with her, and I would highly recommend her to any team."
+  }
+] %}
+
+{% macro card(t) %}
+  <blockquote class="testimonial-card">
+    <span class="testimonial-card__mark" aria-hidden="true">&ldquo;</span>
+    <p class="testimonial-card__quote">{{ t.quote }}</p>
+    <footer class="testimonial-card__attribution">
+      {% if t.photo %}
+        <img class="testimonial-card__avatar" src="{{ t.photo | url }}" alt="" loading="lazy">
+      {% endif %}
+      <div class="testimonial-card__names">
+        <span class="testimonial-card__name">{{ t.name }}</span>
+        <span class="testimonial-card__role">{{ t.title }} | {{ t.company }}</span>
+      </div>
+    </footer>
+  </blockquote>
+{% endmacro %}
