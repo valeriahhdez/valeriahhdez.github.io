@@ -220,8 +220,8 @@ code = "IBM Plex Mono"
 # Read more:
 # - https://zensical.org/docs/setup/colors/
 # ----------------------------------------------------------------------------
-# [[project.theme.palette]]
-# scheme = "default"
+[[project.theme.palette]]
+scheme = "default"
 # toggle.icon = "lucide/sun"
 # toggle.name = "Switch to dark mode"
 
