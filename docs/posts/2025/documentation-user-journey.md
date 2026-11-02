@@ -5,7 +5,7 @@ title: Rethinking the user journey for technical documentation
 date: 2025-09-20
 author: Valeria Hernandez
 description: This article offers an strategy to optimize the user journey in technical documentation for a better user experience. 
-cover: assets/images/covers/git-concept-map.png
+cover: assets/images/covers/docs-user-journey.png
 tags:
   - documentation roadmap
   - user journeys
